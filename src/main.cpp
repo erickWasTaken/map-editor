@@ -1,12 +1,21 @@
+#define APIENTRY
+#define GL_GLEXT_PROTOTYPES
+#include "glcorearb.h"
+
 #include "platform.h"
 #ifdef __linux__
 #include "linux_platform.cpp"
 #endif
+
+#include "Memory.h"
+#include "gl_loader.cpp"
+
 #include <iostream>
 
 int main(){
-    if(!create_window(1280, 720))
-        std::cout<<"something went wrong creating a window";
+    MemoryCluster transientCluster = calloc(MB(50));  
+
+    create_window(1280, 720);
     // init_input();
-    // init_gl();
+    init_gl(transientCluster);
 }

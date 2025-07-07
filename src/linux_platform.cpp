@@ -69,3 +69,9 @@ bool create_window(int width, int height){
     return true;
 }
 
+void* load_gl_function(char* funcName){
+    void* proc = (void*)glXGetProcAddress((const GLubyte*)funcName);
+    if(!proc)
+        return nullptr;
+    return proc;
+}
