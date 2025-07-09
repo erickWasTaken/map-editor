@@ -1,3 +1,4 @@
+#include <math.h>
 #include <GL/glut.h>
 #include <GL/gl.h>
 #include <stdio.h>
@@ -33,8 +34,25 @@ void drawPixel(int x, int y, int r, int g, int b){
     glEnd();
 }
 
+void drawLine(int x1, int y1, int x2, int y2, int r, int g, int b){
+    float x = x2 - x1;
+    float y = y2 - y1;
+    float max = fabs(x);
+    if(fabs(y) > max)
+        max = fabs(y);
+
+    x /= max;
+    y /= max;
+
+    for(int i = 0; i < max; i++){
+        drawPixel(x1 / G.scale, y1 / G.scale, r, g, b);
+        x1 += x;
+        y1 += y;
+    }
+}
+
 void display(){
-    drawPixel(0, 0, 255, 255, 255);
+    drawLine(100, 100, 20, 10, 255, 255, 255);                         // NDC coords
     glutSwapBuffers();
     glutPostRedisplay();
 }
@@ -46,7 +64,7 @@ int main(int argc, char* argv[]){
     glutInitWindowSize(GLSW, GLSH);
     glutCreateWindow("Map Editor");
     glPointSize(pixelScale);                                 // Pixel size
-    glViewport(0, 0, GLSW, GLSH);
+    glOrtho(0, GLSW, GLSH, 0, 0, 100);
     init();
 
     glutDisplayFunc(display);
