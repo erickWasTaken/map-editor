@@ -8,4 +8,4 @@ if [[ "$(uname)" == "Linux" ]]; then
     outputFile=map-editor
 fi
 
-clang $includes -g src/main.c -o$outputFile $libs $warnings
+clang -g src/main.c -o$outputFile $libs $warnings

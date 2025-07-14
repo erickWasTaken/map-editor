@@ -24,6 +24,16 @@ typedef struct{
     int y;
 }MousePos; MousePos mousePos;
 
+typedef struct{
+    int x;
+    int y;
+}ivec2;
+
+typedef struct{
+    ivec2 vertices[128];
+    int count;
+}mesh; mesh drawData[10];
+
 void init(){
     G.scale = 4;
     G.selS = 0; G.selW = 0;
@@ -56,8 +66,15 @@ void drawLine(float x1, float y1, float x2, float y2, int r, int g, int b){
     }
 }
 
+void click(int button, int state, int x, int y){
+    if(x < 580){
+        ivec2 point = {x / pixelScale, y / pixelScale};
+        drawData[0].vertices[drawData[0].count] = point;
+        drawData[0].count++;
+    }
+}
+
 void mouse(int x, int y){
-    printf("mouse x: %d\nmouse y: %d\n", x, y);
     mousePos.x = x / pixelScale;
     mousePos.y = y / pixelScale;
 }
@@ -68,12 +85,24 @@ void clear_background(){
             drawPixel(i, j, 0, 0, 0);
         }
     }
+
+    for(int x = 581 / pixelScale; x < GLSW / pixelScale; x++){
+        for(int y = 0; y < GLSH / pixelScale; y++){
+            drawPixel(x, y, 255, 0, 0);
+        }
+    }
 }
 
 void display(){
     clear_background();
     drawPixel(mousePos.x, mousePos.y, 255, 0, 0);
-    drawLine(GLSW /(2 + pixelScale), GLSH/(2 + pixelScale), mousePos.x, mousePos.y, 255, 255, 255);                         
+    // drawLine(GLSW /(2 + pixelScale), GLSH/(2 + pixelScale), mousePos.x, mousePos.y, 255, 255, 255);                         
+
+    mesh current = drawData[0];
+    for(int i = 1; i < current.count; i++){
+        drawLine(current.vertices[i -1].x, current.vertices[i - 1].y, current.vertices[i].x, current.vertices[i].y, 255, 255, 255);
+    }
+
     glutSwapBuffers();
     glutPostRedisplay();
 }
@@ -88,6 +117,7 @@ int main(int argc, char* argv[]){
     glOrtho(0, GLSW, GLSH, 0, 0, 100);
     init();
 
+    glutMouseFunc(click);
     glutPassiveMotionFunc(mouse);
     glutDisplayFunc(display);
 
