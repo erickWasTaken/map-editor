@@ -66,8 +66,54 @@ void drawLine(float x1, float y1, float x2, float y2, int r, int g, int b){
     }
 }
 
+void save(){
+    FILE *fp = fopen("src/level.h", "w");
+    if(!fp){
+        printf("Save(); Failed to open level.h");
+        return;
+    }
+    if(drawData[0].count == 0){
+        printf("No data to save");
+        return;
+    }
+
+    fprintf(fp, "%i\n", drawData[0].count);
+    for(int i = 0; i < drawData[0].count; i++){
+        ivec2 vert = drawData[0].vertices[i];
+        fprintf(fp, "%i %i\n", vert.x, vert.y);
+    }
+
+    fclose(fp);
+}
+
+void load(){
+    FILE *fp = fopen("src/level.h", "r");
+    if(!fp){
+        printf("Load(): Failed to open level.h");
+        return;
+    }
+        
+    fscanf(fp, "%i", &drawData[0].count);
+    for(int i = 0; i < drawData[0].count; i++){
+        fscanf(fp, "%i %i", &drawData[0].vertices[i].x, &drawData[0].vertices[i].y);
+    }
+
+    fclose(fp);
+}
+
 void click(int button, int state, int x, int y){
-    if(x < 580){
+    if(state == GLUT_UP)
+        return;
+    if(x > 580){
+        if(y > 400){
+            save();
+            return;
+        }else if(y > 319){
+            load();
+            return;
+        }
+    }
+    else{
         ivec2 point = {x / pixelScale, y / pixelScale};
         drawData[0].vertices[drawData[0].count] = point;
         drawData[0].count++;
@@ -89,6 +135,22 @@ void clear_background(){
     for(int x = 581 / pixelScale; x < GLSW / pixelScale; x++){
         for(int y = 0; y < GLSH / pixelScale; y++){
             drawPixel(x, y, 255, 0, 0);
+        }
+    }
+
+    if(mousePos.x >= 580 / pixelScale){
+        if(mousePos.y >= 400 / pixelScale){
+            for(int x = 580 / pixelScale; x < GLSW / pixelScale; x++){
+                for(int y = 400 / pixelScale; y < GLSH / pixelScale; y++){
+                    drawPixel(x, y, 127, 0, 0);
+                }
+            }
+        }else if(mousePos.y > 319 / pixelScale){
+            for(int x = 580 / pixelScale; x < GLSW / pixelScale; x++){
+                for(int y = 320 / pixelScale; y < 399 / pixelScale; y++){
+                    drawPixel(x, y, 127, 0, 0);
+                }
+            }
         }
     }
 }
