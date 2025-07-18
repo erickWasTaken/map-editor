@@ -45,7 +45,7 @@ void init(){
 void drawPixel(int x, int y, int r, int g, int b){
     glColor3ub(r, g, b);
     glBegin(GL_POINTS);
-    glVertex2i(x * pixelScale, y * pixelScale);
+    glVertex2i(x, y);
     glEnd();
 }
 
@@ -114,40 +114,40 @@ void click(int button, int state, int x, int y){
         }
     }
     else{
-        ivec2 point = {x / pixelScale, y / pixelScale};
+        ivec2 point = {x, y};
         drawData[0].vertices[drawData[0].count] = point;
         drawData[0].count++;
     }
 }
 
 void mouse(int x, int y){
-    mousePos.x = x / pixelScale;
-    mousePos.y = y / pixelScale;
+    mousePos.x = x;
+    mousePos.y = y;
 }
 
 void clear_background(){
-    for(int i = 0; i < GLSW / pixelScale; i++){
-        for(int j = 0; j < GLSH / pixelScale; j++){
+    for(int i = 0; i < GLSW; i++){
+        for(int j = 0; j < GLSH; j++){
             drawPixel(i, j, 0, 0, 0);
         }
     }
 
-    for(int x = 581 / pixelScale; x < GLSW / pixelScale; x++){
-        for(int y = 0; y < GLSH / pixelScale; y++){
+    for(int x = 581; x < GLSW; x++){
+        for(int y = 0; y < GLSH; y++){
             drawPixel(x, y, 255, 0, 0);
         }
     }
 
-    if(mousePos.x >= 580 / pixelScale){
-        if(mousePos.y >= 400 / pixelScale){
-            for(int x = 580 / pixelScale; x < GLSW / pixelScale; x++){
-                for(int y = 400 / pixelScale; y < GLSH / pixelScale; y++){
+    if(mousePos.x >= 580){
+        if(mousePos.y >= 400){
+            for(int x = 580; x < GLSW; x++){
+                for(int y = 400; y < GLSH; y++){
                     drawPixel(x, y, 127, 0, 0);
                 }
             }
-        }else if(mousePos.y > 319 / pixelScale){
-            for(int x = 580 / pixelScale; x < GLSW / pixelScale; x++){
-                for(int y = 320 / pixelScale; y < 399 / pixelScale; y++){
+        }else if(mousePos.y > 319){
+            for(int x = 580; x < GLSW; x++){
+                for(int y = 320; y < 399; y++){
                     drawPixel(x, y, 127, 0, 0);
                 }
             }
@@ -162,7 +162,11 @@ void display(){
 
     mesh current = drawData[0];
     for(int i = 1; i < current.count; i++){
-        drawLine(current.vertices[i -1].x, current.vertices[i - 1].y, current.vertices[i].x, current.vertices[i].y, 255, 255, 255);
+        drawLine(current.vertices[i -1].x, 
+                 current.vertices[i - 1].y, 
+                 current.vertices[i].x, 
+                 current.vertices[i].y, 
+                 255, 255, 255);
     }
 
     glutSwapBuffers();
