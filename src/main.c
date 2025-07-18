@@ -111,6 +111,10 @@ void click(int button, int state, int x, int y){
         }else if(y > 319){
             load();
             return;
+        }else if(y > 239){
+            drawData[0].count = 0;
+            drawData[0].vertices[0].x = '\0';
+            return;
         }
     }
     else{
@@ -148,6 +152,12 @@ void clear_background(){
         }else if(mousePos.y > 319){
             for(int x = 580; x < GLSW; x++){
                 for(int y = 320; y < 399; y++){
+                    drawPixel(x, y, 127, 0, 0);
+                }
+            }
+        }else if(mousePos.y > 239){
+            for(int x = 580; x < GLSW; x++){
+                for(int y = 240; y < 320; y++){
                     drawPixel(x, y, 127, 0, 0);
                 }
             }
