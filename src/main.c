@@ -216,10 +216,10 @@ void display(){
 
     mesh current = drawData[0];
     for(int i = 1; i < current.count; i++){
-        drawLine(current.vertices[i -1].x, 
-                 current.vertices[i - 1].y, 
-                 current.vertices[i].x, 
-                 current.vertices[i].y, 
+        drawLine(current.vertices[i -1].x * cam.zoom, 
+                 current.vertices[i - 1].y * cam.zoom, 
+                 current.vertices[i].x * cam.zoom, 
+                 current.vertices[i].y * cam.zoom, 
                  255, 255, 255);
     }
 
