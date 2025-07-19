@@ -177,9 +177,9 @@ void clear_background(){
 
     for(int i = 0; i < GLSW; i++){
         for(int j = 0; j < GLSH; j++){
-            int x = i + cam.pos.x;
-            int y = j + cam.pos.y;
-            if(((abs(x) / h) % 2 == 0 && (y / h) % 2 == 1) || ((abs(x) / h) % 2 == 1 && (y / h) % 2 == 0)){
+            int x = i - cam.pos.x;
+            int y = j - cam.pos.y;
+            if(((x / h) % 2 == 0 && (y / h) % 2 == 1) || ((x / h) % 2 == 1 && (y / h) % 2 == 0)){
                 bg.r = 60; bg.g = 60; bg.b = 60;
             }else{
                 bg.r = 0; bg.g = 0; bg.b = 0;
