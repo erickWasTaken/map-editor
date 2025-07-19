@@ -34,6 +34,12 @@ typedef struct{
     int count;
 }mesh; mesh drawData[10];
 
+typedef struct{
+    int r;
+    int g;
+    int b;
+}color; color bg;
+
 void init(){
     G.scale = 4;
     G.selS = 0; G.selW = 0;
@@ -111,7 +117,7 @@ void click(int button, int state, int x, int y){
         }else if(y > 319){
             load();
             return;
-        }else if(y > 239){
+        }else if(y > 239){ // Clears drawData
             drawData[0].count = 0;
             drawData[0].vertices[0].x = '\0';
             return;
@@ -130,9 +136,15 @@ void mouse(int x, int y){
 }
 
 void clear_background(){
+    int h = GLSH / 8;
     for(int i = 0; i < GLSW; i++){
         for(int j = 0; j < GLSH; j++){
-            drawPixel(i, j, 0, 0, 0);
+            if(((i /  h) % 2 == 0 && (j / h) % 2 == 1) || ((i / h) % 2 == 1 && (j / h) % 2 == 0)){
+                bg.r = 60; bg.g = 60; bg.b = 60;
+            }else{
+                bg.r = 0; bg.g = 0; bg.b = 0;
+            }
+            drawPixel(i, j, bg.r, bg.g, bg.b);
         }
     }
 
