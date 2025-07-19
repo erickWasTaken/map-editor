@@ -130,7 +130,7 @@ void click(int button, int state, int x, int y){
         }
     }
     else{
-        ivec2 point = {x, y};
+        ivec2 point = {cam.pos.x + x, cam.pos.y + y};
         drawData[0].vertices[drawData[0].count] = point;
         drawData[0].count++;
     }
@@ -216,10 +216,10 @@ void display(){
 
     mesh current = drawData[0];
     for(int i = 1; i < current.count; i++){
-        drawLine(current.vertices[i -1].x * cam.zoom, 
-                 current.vertices[i - 1].y * cam.zoom, 
-                 current.vertices[i].x * cam.zoom, 
-                 current.vertices[i].y * cam.zoom, 
+        drawLine(current.vertices[i -1].x * cam.zoom + cam.pos.x, 
+                 current.vertices[i - 1].y * cam.zoom + cam.pos.y, 
+                 current.vertices[i].x * cam.zoom + cam.pos.x, 
+                 current.vertices[i].y * cam.zoom + cam.pos.y, 
                  255, 255, 255);
     }
 
