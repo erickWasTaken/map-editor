@@ -40,6 +40,12 @@ typedef struct{
     int b;
 }color; color bg;
 
+typedef struct{
+    ivec2 pos; 
+    float zoom;
+    int moveSpeed;
+}camera; camera cam;
+
 void init(){
     G.scale = 4;
     G.selS = 0; G.selW = 0;
@@ -135,11 +141,37 @@ void mouse(int x, int y){
     mousePos.y = y;
 }
 
+void keyboard(unsigned char key, int x, int y){
+    switch(key){
+        // inverted. pos is the offset to be added to geometry
+        case 'a':
+            cam.pos.x += cam.moveSpeed;
+            break;
+        case 'd':
+            cam.pos.x -= cam.moveSpeed;
+            break;
+        case 'A':
+        case 'S':
+            cam.zoom -= 1;
+            if(cam.zoom < 1)
+                cam.zoom = 10;
+            break;
+
+        case 'D':
+        case 'W':
+            cam.zoom += 1;
+            if(cam.zoom > 10)
+                cam.zoom = 1;
+            break;
+    }
+}
+
 void clear_background(){
-    int h = GLSH / 8;
+    int h = (GLSH / 8) * cam.zoom;
+
     for(int i = 0; i < GLSW; i++){
         for(int j = 0; j < GLSH; j++){
-            if(((i /  h) % 2 == 0 && (j / h) % 2 == 1) || ((i / h) % 2 == 1 && (j / h) % 2 == 0)){
+            if(((i / h) % 2 == 0 && (j / h) % 2 == 1) || ((i / h) % 2 == 1 && (j / h) % 2 == 0)){
                 bg.r = 60; bg.g = 60; bg.b = 60;
             }else{
                 bg.r = 0; bg.g = 0; bg.b = 0;
@@ -206,6 +238,9 @@ int main(int argc, char* argv[]){
     init();
 
     glutMouseFunc(click);
+    cam.zoom = 1;
+    cam.moveSpeed = 1;
+    glutKeyboardFunc(keyboard);
     glutPassiveMotionFunc(mouse);
     glutDisplayFunc(display);
 
