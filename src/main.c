@@ -104,7 +104,7 @@ void drawLine(float x1, float y1, float x2, float y2, int r, int g, int b){
 }
 
 void save(){
-    FILE *fp = fopen("level.h", "w");
+    FILE *fp = fopen("src/level.h", "w");
     if(!fp){
         printf("Save(); Failed to open level.h");
         return;
@@ -119,8 +119,6 @@ void save(){
         ivec2 vert = drawData[0].vertices[i];
         fprintf(fp, "%i %i\n", vert.x, vert.y);
     }
-
-    fprintf(fp, "%i %i", cam.pos.x, cam.pos.y);
 
     fclose(fp);
 }
@@ -170,12 +168,11 @@ void mouse(int x, int y){
 
 void keyboard(unsigned char key, int x, int y){
     switch(key){
-        // inverted. pos is the offset to be added to geometry
         case 'a':
-            cam.pos.x += cam.moveSpeed;
+            cam.pos.x -= cam.moveSpeed;
             break;
         case 'd':
-            cam.pos.x -= cam.moveSpeed;
+            cam.pos.x += cam.moveSpeed;
             break;
         case 's':
             cam.pos.y += cam.moveSpeed;
