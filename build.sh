@@ -1,6 +1,8 @@
 #!/bin/bash
 
+defines="-DAPP"
 warnings="-Wno-writable-strings -Wno-format-security -Wno-deprecated-declarations -Wno-switch"
+includes="-Ithird_party"
 
 if [[ "$(uname)" == "Linux" ]]; then
     echo "Running on Linux"
@@ -8,4 +10,4 @@ if [[ "$(uname)" == "Linux" ]]; then
     outputFile=map-editor
 fi
 
-clang -g src/main.c -o$outputFile $libs $warnings
+clang -g $includes src/main.c -o$outputFile $libs $warnings $defines

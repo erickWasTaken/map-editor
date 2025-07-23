@@ -3,6 +3,11 @@
 #include <GL/gl.h>
 #include <stdio.h>
 
+#ifdef __linux__
+    #include "platform.c"
+#endif
+#include "renderer.c"
+
 #define res 1
 #define SW 160*res
 #define SH 120*res
@@ -261,6 +266,16 @@ void display(){
     glutPostRedisplay();
 }
 
+void render(){
+    glClearColor(119.0f / 255.0f, 33.0f / 255.0f, 111.0f / 255.0f, 1.0f);
+    glClearDepth(.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, GLSW, GLSH);
+
+    glutSwapBuffers();
+    glutPostRedisplay();
+}
+
 int main(int argc, char* argv[]){
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);            // Display with double RGBA buffering
@@ -270,11 +285,13 @@ int main(int argc, char* argv[]){
     glPointSize(pixelScale);                                 // Pixel size
     glOrtho(0, GLSW, GLSH, 0, 0, 100);
     init();
+    init_gl();
 
     glutMouseFunc(click);
     glutKeyboardFunc(keyboard);
     glutPassiveMotionFunc(mouse);
-    glutDisplayFunc(display);
+    // glutDisplayFunc(display);
+    glutDisplayFunc(render);
 
     glutMainLoop();
     return 0;
