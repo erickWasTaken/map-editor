@@ -57,7 +57,7 @@ GLAPI void APIENTRY glLinkProgram(GLuint program){
 }
 
 GLAPI void APIENTRY glGetProgramiv(GLuint program, GLenum pname, GLint *params){
-    return glGetProgramiv(program, pname, params);
+    return glGetProgramiv_ptr(program, pname, params);
 }
 
 GLAPI void APIENTRY glGetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei *length, GLchar *infoLog){

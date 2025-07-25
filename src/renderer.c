@@ -34,7 +34,6 @@ GLuint create_shader(int shaderType, const char* shaderPath, MemoryCluster* clus
     GLuint shaderID = glCreateShader(shaderType);
     glShaderSource(shaderID, ArraySize(programSource), programSource, 0);
     glCompileShader(shaderID);
-    puts("passed");
 
     int success;
     char shaderLog[2048] = {};
@@ -42,9 +41,8 @@ GLuint create_shader(int shaderType, const char* shaderPath, MemoryCluster* clus
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
     if(!success){
         glGetShaderInfoLog(shaderID, 2048, 0, shaderLog);
-        printf("Failed linking shader: %s", shaderLog);
+        printf("Failed linking shader: %s\n", shaderLog);
     }
-    puts("passed");
 
     return shaderID;
 }
@@ -55,25 +53,29 @@ bool init_gl(MemoryCluster* cluster){
     GLuint vertexShaderID = create_shader(GL_VERTEX_SHADER, "shaders/quad.vert", cluster);
     GLuint fragShaderID = create_shader(GL_FRAGMENT_SHADER, "shaders/quad.frag", cluster);
 
+
     if(!vertexShaderID || !fragShaderID){
         puts("failed to create shaders");
         return false;
     }
 
-    unsigned int currentShader = glContext.shaders[glContext.shaderCount];
+    GLuint currentShader = (GLuint)glContext.shaders[glContext.shaderCount];
     glAttachShader(currentShader, vertexShaderID);
     glAttachShader(currentShader, fragShaderID);
     glLinkProgram(currentShader);
+    puts("passed");
 
     int success;
     char infoLog[512];
     glGetProgramiv(currentShader, GL_LINK_STATUS, &success);
+    puts("passed");
 
     if(!success){
         glGetProgramInfoLog(currentShader, 512, 0, infoLog);
-        printf("Failed to link shader program! %s", infoLog);
+        printf("Failed to link shader program! %s\n", infoLog);
         return false;
     }
+    puts("passed");
 
     glDetachShader(currentShader, vertexShaderID);
     glDetachShader(currentShader, fragShaderID);
@@ -81,6 +83,7 @@ bool init_gl(MemoryCluster* cluster){
     glDeleteShader(fragShaderID);
 
     glContext.shaderCount++;
+    puts("passed");
 
 
     GLuint VAO;
@@ -90,8 +93,7 @@ bool init_gl(MemoryCluster* cluster){
     glGenBuffers(1, &glContext.transformsSBOID);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, glContext.transformsSBOID);
     glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(struct Transform) * 1000, glContext.transforms, GL_DYNAMIC_DRAW);
-
-    printf("past arrays and buffers creation");
+    puts("passed");
 
     glEnable(GL_FRAMEBUFFER_SRGB);
     glDisable(0x809D);
@@ -99,7 +101,7 @@ bool init_gl(MemoryCluster* cluster){
     glDepthFunc(GL_GREATER);
 
     glUseProgram(glContext.shaders[0]);
+    puts("passed");
 
-    printf("past program usage");
     return true;
 }
