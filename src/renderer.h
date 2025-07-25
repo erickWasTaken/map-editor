@@ -4,6 +4,8 @@
 #include "shader.h"
 #include "platform.h"
 
+#include <stdio.h>
+
 static PFNGLATTACHSHADERPROC glAttachShader_ptr;
 static PFNGLLINKPROGRAMPROC glLinkProgram_ptr;
 static PFNGLGETPROGRAMIVPROC glGetProgramiv_ptr;
@@ -98,7 +100,7 @@ GLAPI GLuint APIENTRY glCreateShader(GLenum shaderType){
     return glCreateShader_ptr(shaderType);
 }
 
-GLAPI void APIENTRY glShaderSource(GLuint shader, GLsizei count, const GLchar* *const strings, const GLint *length){
+GLAPI void APIENTRY glShaderSource(GLuint shader, GLsizei count, const GLchar** strings, const GLint *length){
     return glShaderSource_ptr(shader, count, strings, length);
 }
 

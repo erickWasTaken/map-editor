@@ -29,15 +29,15 @@ typedef struct{
     int y;
 }MousePos; MousePos mousePos;
 
-typedef struct{
-    int x;
-    int y;
-}ivec2;
-
-typedef struct{
-    float x;
-    float y;
-}vec2;
+// typedef struct{
+//     int x;
+//     int y;
+// }ivec2;
+//
+// typedef struct{
+//     float x;
+//     float y;
+// }vec2;
 
 typedef struct{
     ivec2 vertices[128];
@@ -71,7 +71,15 @@ ivec2 world_to_screen(int x, int y){
     return result;
 }
 
-void init(){
+void init(int argc, char* argv[]){
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);            // Display with double RGBA buffering
+    glutInitWindowPosition(0, 0);
+    glutInitWindowSize(GLSW, GLSH);
+    glutCreateWindow("Map Editor");
+    glPointSize(pixelScale);                                // Pixel size
+    glOrtho(0, GLSW, GLSH, 0, 0, 100);
+
     G.scale = 4;
     G.selS = 0; G.selW = 0;
     G.bottom = 0; G.top = 40;
@@ -82,6 +90,8 @@ void init(){
     cam.pos.x = cam.size.x / 2; cam.pos.y = cam.size.y / 2;
     cam.zoom = 1;
     cam.moveSpeed = 4;
+
+
 }
 
 void drawPixel(int x, int y, int r, int g, int b){
@@ -277,15 +287,10 @@ void render(){
 }
 
 int main(int argc, char* argv[]){
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);            // Display with double RGBA buffering
-    glutInitWindowPosition(0, 0);
-    glutInitWindowSize(GLSW, GLSH);
-    glutCreateWindow("Map Editor");
-    glPointSize(pixelScale);                                 // Pixel size
-    glOrtho(0, GLSW, GLSH, 0, 0, 100);
-    init();
-    init_gl();
+    init(argc, argv);
+
+    MemoryCluster cluster = allocate_cluster(MB(5));
+    init_gl(&cluster);
 
     glutMouseFunc(click);
     glutKeyboardFunc(keyboard);
